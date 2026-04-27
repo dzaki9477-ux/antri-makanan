@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Aplikasi Antrian Makanan</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      text-align: center; 
+      margin-top: 50px; 
+    }
+    .menu { margin: 20px; }
+    #qrcode-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sistem Antrian Makanan</h1>
+  
+  <div class="menu">
+    <label for="nama">Nama:</label>
+    <input type="text" id="nama" placeholder="Masukkan nama Anda">
+    <br><br>
+    
+    <label for="menu">Pilih Menu:</label>
+    <select id="menu">
+      <option value="Nasi Goreng">Nasi Goreng</option>
+      <option value="Mie Ayam">Mie Ayam</option>
+      <option value="Sate Ayam">Sate Ayam</option>
+      <option value="Bakso">Bakso</option>
+    </select>
+    <br><br>
+    
+    <button onclick="ambilAntrian()">Ambil Nomor Antrian</button>
+  </div>
+  
+  <h2 id="nomor"></h2>
+  <h3 id="pilihanNama"></h3>
+  <h3 id="pilihanMenu"></h3>
+  
+  <!-- Container QR Code di tengah -->
+  <div id="qrcode-container">
+    <div id="qrcode"></div>
+  </div>
+  
+  <script>
+    let counter = 1;
+
+    function ambilAntrian() {
+      let nama = document.getElementById("nama").value;
+      let menu = document.getElementById("menu").value;
+      let nomorAntrian = counter++;
+      
+      document.getElementById("nomor").innerText = "Nomor Antrian Anda: " + nomorAntrian;
+      document.getElementById("pilihanNama").innerText = "Nama: " + nama;
+      document.getElementById("pilihanMenu").innerText = "Menu: " + menu;
+      
+      // Hapus QR lama
+      document.getElementById("qrcode").innerHTML = "";
+      
+      // Buat URL website dengan parameter
+      let baseUrl = "https://contohwebsite.com/antrian";
+      let url = baseUrl + "?nomor=" + encodeURIComponent(nomorAntrian) +
+                "&nama=" + encodeURIComponent(nama) +
+                "&menu=" + encodeURIComponent(menu);
+      
+      // Generate QR Code berisi URL
+      new QRCode(document.getElementById("qrcode"), {
+        text: url,
+        width: 200,
+        height: 200
+      });
+    }
+  </script>
+</body>
+</html>
